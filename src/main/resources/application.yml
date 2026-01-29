@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
+    org.springframework.boot.autoconfigure.web.servlet.error: DEBUG
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/music}
+    username: ${DB_USER:music}
+    password: ${DB_PASS:music}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+app:
+  security:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+    jwt:
+      secret: ${JWT_SECRET:CHANGE_ME_SUPER_SECRET_64_CHARS_MINIMUM________________}
+      access-ttl-minutes: 20
+      refresh-ttl-minutes: 1440 # 1 day
+  rate-limit:
+    requests-per-minute: 10
+  minio:
+    endpoint: ${MINIO_ENDPOINT:http://minio:9000}
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MINIO_SECRET_KEY:minioadmin}
+    bucket: ${MINIO_BUCKET:album-covers}
+    presign-expiration-minutes: 30
+  regionais:
+    url: ${REGIONAIS_URL:https://integrador-argus-api.geia.vip/v1/regionais}
+
+# demo user for evaluation (do NOT do this in real prod)
+demo-user:
+  username: ${DEMO_USER:admin}
+  password: ${DEMO_PASS:admin123}
